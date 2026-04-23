@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PharmaTrack DApp</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-secondary: #11161d;
+      --panel: rgba(23, 28, 36, 0.78);
+      --panel-hover: rgba(31, 38, 49, 0.92);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e8eaed;
+      --muted: #a8b0bb;
+      --accent: #10a37f;
+      --accent-hover: #0e8f70;
+      --secondary-btn: #2a313c;
+      --secondary-btn-hover: #353e4c;
+      --success-bg: rgba(16, 163, 127, 0.12);
+      --success-border: rgba(16, 163, 127, 0.28);
+      --info-bg: rgba(255, 255, 255, 0.04);
+      --info-border: rgba(255, 255, 255, 0.08);
+      --error-bg: rgba(239, 68, 68, 0.12);
+      --error-border: rgba(239, 68, 68, 0.28);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(16, 163, 127, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 20%),
+        linear-gradient(180deg, #0b0f14 0%, #11161d 100%);
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 42px 20px 56px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-main {
+      flex: 1 1 640px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(16, 163, 127, 0.12);
+      border: 1px solid rgba(16, 163, 127, 0.2);
+      color: #7ee5c8;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 760px;
+    }
+
+    .wallet-box {
+      flex: 0 0 300px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .wallet-box strong {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .small {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 4px;
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+
+    .status,
+    .result {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      line-height: 1.6;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .status {
+      background: var(--info-bg);
+      border: 1px solid var(--info-border);
+      color: var(--text);
+    }
+
+    .result {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--text);
+    }
+
+    .error {
+      background: var(--error-bg) !important;
+      border: 1px solid var(--error-border) !important;
+      color: #ffd4d4 !important;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      background: var(--panel-hover);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 8px;
+      color: #d9dde3;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input::placeholder {
+      color: #7f8a98;
+    }
+
+    input:focus {
+      border-color: rgba(16, 163, 127, 0.7);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.14);
+    }
+
+    button {
+      margin-top: 18px;
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 13px 16px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .success {
+      background: var(--accent);
+      color: white;
+    }
+
+    .success:hover {
+      background: var(--accent-hover);
+    }
+
+    .outline {
+      background: var(--secondary-btn);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .outline:hover {
+      background: var(--secondary-btn-hover);
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+      padding-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .wrap {
+        padding: 24px 14px 40px;
+      }
+
+      .hero h1 {
+        font-size: 1.9rem;
+      }
+
+      .hero-main,
+      .wallet-box,
+      .card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">Blockchain Pharmaceutical Tracking</div>
+        <h1>PharmaTrack DApp</h1>
+        <p>
+          A blockchain-based pharmaceutical supply chain tracking system designed for
+          transparent medicine registration, secure ownership transfer, and on-chain
+          verification through the Ethereum Sepolia network.
+        </p>
+      </div>
+
+      <div class="wallet-box">
+        <strong>Wallet Connection</strong>
+        <div id="accountText" class="small">Not connected</div>
+        <button class="primary" onclick="connectWallet()">Connect MetaMask</button>
+      </div>
+    </div>
+
+    <div id="globalStatus" class="status">
+      Status: Ready. Make sure MetaMask is connected to the Sepolia network.
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Add Medicine Record</h2>
+        <div class="sub">
+          Register a new medicine on-chain. Example: Paracetamol, Ibuprofen, Amoxicillin.
+        </div>
+        <label for="medName">Medicine Name</label>
+        <input id="medName" type="text" placeholder="Enter medicine name" />
+        <button class="success" onclick="addMedicine()">Add Medicine</button>
+        <div id="addResult" class="result" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Transfer Medicine Ownership</h2>
+        <div class="sub">
+          Transfer a medicine record to another wallet and update its current delivery status.
+        </div>
+        <label for="transferId">Medicine ID</label>
+        <input id="transferId" type="number" placeholder="e.g. 1" />
+
+        <label for="newOwner">New Owner Address</label>
+        <input id="newOwner" type="text" placeholder="0x..." />
+
+        <label for="newStatus">New Status</label>
+        <input id="newStatus" type="text" placeholder="Distributed / Delivered / In Pharmacy" />
+
+        <button class="primary" onclick="transferOwnership()">Transfer Ownership</button>
+        <div id="transferResult" class="result" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Verify Medicine Details</h2>
+        <div class="sub">
+          Fetch medicine details directly from the blockchain using a medicine ID.
+        </div>
+        <label for="medId">Medicine ID</label>
+        <input id="medId" type="number" placeholder="e.g. 1" />
+        <button class="outline" onclick="getMedicine()">Get Medicine Details</button>
+        <div id="viewResult" class="result" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      PharmaTrack • Secure medicine tracking on Sepolia • Powered by MetaMask and Ethers.js
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+  <script>
+    let provider, signer, contract;
+
+    const contractAddress = "0x4fFed2537B650c4B97030F035d10c546d01b2430";
+
+    const abi = [
+      "function addMedicine(string _name)",
+      "function transferOwnership(uint256 _id, address _newOwner, string _status)",
+      "function getMedicine(uint256 _id) view returns (uint256 id, string name, address owner, string status)"
+    ];
+
+    function setStatus(message, isError = false) {
+      const box = document.getElementById("globalStatus");
+      box.textContent = "Status: " + message;
+      box.className = isError ? "status error" : "status";
+    }
+
+    function showResult(id, text, isError = false) {
+      const el = document.getElementById(id);
+      el.style.display = "block";
+      el.textContent = text;
+      el.className = isError ? "result error" : "result";
+    }
+
+    function shortAddress(addr) {
+      return addr ? addr.slice(0, 6) + "..." + addr.slice(-4) : "";
+    }
+
+    async function connectWallet() {
+      try {
+        if (!window.ethereum) {
+          setStatus("MetaMask not found. Please install it first.", true);
+          return;
+        }
+
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        signer = await provider.getSigner();
+
+        const network = await provider.getNetwork();
+        if (network.chainId !== 11155111n) {
+          setStatus("Wrong network. Please switch MetaMask to Sepolia.", true);
+          return;
+        }
+
+        contract = new ethers.Contract(contractAddress, abi, signer);
+        const userAddress = await signer.getAddress();
+        document.getElementById("accountText").textContent = "Connected: " + shortAddress(userAddress);
+        setStatus("Wallet connected successfully.");
+      } catch (err) {
+        setStatus(err.message || "Wallet connection failed.", true);
+      }
+    }
+
+    async function addMedicine() {
+      try {
+        if (!contract) {
+          setStatus("Connect wallet first.", true);
+          return;
+        }
+
+        const name = document.getElementById("medName").value.trim();
+        if (!name) {
+          showResult("addResult", "Please enter a medicine name.", true);
+          return;
+        }
+
+        setStatus("Sending addMedicine transaction...");
+        const tx = await contract.addMedicine(name);
+        await tx.wait();
+
+        setStatus("Medicine added successfully.");
+        showResult(
+          "addResult",
+          "Medicine added.\nTransaction Hash: " + tx.hash + "\nMedicine Name: " + name
+        );
+      } catch (err) {
+        showResult("addResult", err.reason || err.message || "Failed to add medicine.", true);
+        setStatus("Add medicine failed.", true);
+      }
+    }
+
+    async function transferOwnership() {
+      try {
+        if (!contract) {
+          setStatus("Connect wallet first.", true);
+          return;
+        }
+
+        const id = document.getElementById("transferId").value.trim();
+        const newOwner = document.getElementById("newOwner").value.trim();
+        const status = document.getElementById("newStatus").value.trim();
+
+        if (!id || !newOwner || !status) {
+          showResult("transferResult", "Please fill in all transfer fields.", true);
+          return;
+        }
+
+        if (!ethers.isAddress(newOwner)) {
+          showResult("transferResult", "New owner address is not valid.", true);
+          return;
+        }
+
+        setStatus("Sending transferOwnership transaction...");
+        const tx = await contract.transferOwnership(id, newOwner, status);
+        await tx.wait();
+
+        setStatus("Ownership transferred successfully.");
+        showResult(
+          "transferResult",
+          "Ownership transferred.\nTransaction Hash: " + tx.hash +
+          "\nMedicine ID: " + id +
+          "\nNew Owner: " + newOwner +
+          "\nStatus: " + status
+        );
+      } catch (err) {
+        showResult("transferResult", err.reason || err.message || "Transfer failed.", true);
+        setStatus("Transfer failed.", true);
+      }
+    }
+
+    async function getMedicine() {
+      try {
+        if (!contract) {
+          setStatus("Connect wallet first.", true);
+          return;
+        }
+
+        const id = document.getElementById("medId").value.trim();
+        if (!id) {
+          showResult("viewResult", "Please enter a medicine ID.", true);
+          return;
+        }
+
+        setStatus("Reading medicine from blockchain...");
+        const data = await contract.getMedicine(id);
+
+        showResult(
+          "viewResult",
+          "Medicine ID: " + data.id +
+          "\nName: " + data.name +
+          "\nOwner: " + data.owner +
+          "\nStatus: " + data.status
+        );
+        setStatus("Medicine fetched successfully.");
+      } catch (err) {
+        showResult("viewResult", err.reason || err.message || "Could not fetch medicine.", true);
+        setStatus("Read failed.", true);
+      }
+    }
+  </script>
+</body>
+</html>
